@@ -17,34 +17,34 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                echo 'Running Terraform Init...'
-                sh 'terraform init'
+                container('terraform') {
+                    echo "Running Terraform Init..."
+                    sh "terraform init"
+                }
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                echo 'Running Terraform Plan...'
-                sh 'terraform plan'
+                container('terraform') {
+                    echo "Running Terraform Plan..."
+                    sh "terraform plan"
+                }
             }
         }
 
         stage('Approval') {
-            when {
-                branch 'main'
-            }
             steps {
-                input message: "Approve Terraform Apply?", ok: "Approve"
+                input "Approve to Apply Terraform Changes?"
             }
         }
 
         stage('Terraform Apply') {
-            when {
-                branch 'main'
-            }
             steps {
-                echo 'Running Terraform Apply...'
-                sh 'terraform apply -auto-approve'
+                container('terraform') {
+                    echo "Running Terraform Apply..."
+                    sh "terraform apply -auto-approve"
+                }
             }
         }
     }
