@@ -35,7 +35,7 @@ pipeline {
 
         stage('Approval') {
             steps {
-                input "Approve to Apply Terraform Changes?"
+                input "Approve to Apply Terraform Changes?", ok: "Approve"
             }
         }
 
